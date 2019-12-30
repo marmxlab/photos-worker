@@ -1,0 +1,23 @@
+{
+  "name": "photos-worker",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "tsc": "tsc",
+    "start": "node dist/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@types/bull": "^3.10.6",
+    "@types/fluent-ffmpeg": "^2.1.13",
+    "bull": "^3.12.1",
+    "dotenv": "^8.2.0",
+    "fluent-ffmpeg": "^2.1.2"
+  },
+  "devDependencies": {
+    "typescript": "^3.7.4"
+  }
+}
