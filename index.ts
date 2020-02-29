@@ -6,7 +6,6 @@ const fs = require('fs');
 const path = require('path');
 const Bull = require('bull');
 
-// TODO: make redis password configurable
 const queue = new Bull('thumbnail-generations', {
   redis: {
     port: process.env.REDIS_PORT || 6379,
@@ -18,12 +17,12 @@ const queue = new Bull('thumbnail-generations', {
 const IMAGE_MIMES = ['image/jpeg', 'image/bmp', 'image/png', 'image/webp'];
 const VIDEO_MIMES = ['video/mp4', 'video/mpeg', 'video/ogg', 'video/webm'];
 
-queue.process(async (job: Job<{ filePath: string, fileMIME: string, dstFolder: string, overwrite? : boolean }>, done: DoneCallback) => {
-  const { filePath, fileMIME, dstFolder, overwrite } = job.data;
+queue.process(async (job: Job<{ filePath: string, fileMIME: string, dstFolder: string }>, done: DoneCallback) => {
+  const { filePath, fileMIME, dstFolder } = job.data;
   const fileName = path.basename(filePath);
   const thumbnailPath = `${dstFolder}/${fileName}.jpeg`;
 
-  if (!overwrite && fs.existsSync(thumbnailPath)) {
+  if (fs.existsSync(thumbnailPath)) {
     return done();
   }
 
@@ -31,6 +30,7 @@ queue.process(async (job: Job<{ filePath: string, fileMIME: string, dstFolder: s
     console.log(`Not supported media format detected for generating thumbnails for ${filePath} (${fileMIME})`);
   }
 
+  // create destination folder
   if (!fs.existsSync(dstFolder)) {
     fs.mkdirSync(dstFolder, { recursive: true });
   }
@@ -48,7 +48,7 @@ queue.process(async (job: Job<{ filePath: string, fileMIME: string, dstFolder: s
       ])
   }
 
-  console.log('Start generate thumbnail for:     ', filePath);
+  console.log(`Start generating thumbnail for: ${filePath}`);
 
   ffmpegCommand
     .size('500x?')
