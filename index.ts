@@ -21,7 +21,7 @@ queue.process(async (job: Job<JobInfo>, done: DoneCallback) => {
   const { data: jobInfo } = job;
   const { filePath, fileMIME, dstFolder } = jobInfo;
   const fileName = path.basename(filePath);
-  const thumbnailPath = `${dstFolder}/${fileName}.jpeg`;
+  const thumbnailPath = `${dstFolder}/${fileName}.jpg`;
 
   if (fs.existsSync(thumbnailPath)) {
     console.log(`Thumbnail already exists for ${filePath}`);
