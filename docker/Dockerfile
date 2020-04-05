@@ -3,9 +3,9 @@ FROM node:10
 # Create app directory
 WORKDIR /usr/src/app
 
-COPY ./docker/setup-ffmpeg.sh .
+COPY ./docker/setup-converters.sh .
 
-RUN ./setup-ffmpeg.sh
+RUN ./setup-converters.sh
 
 # Install app dependencies
 # A wildcard is used to ensure both package.json AND package-lock.json are copied
