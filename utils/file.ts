@@ -9,8 +9,4 @@ export default class FileUtil {
   public static isSupportedVideoMIME(mime: string): boolean {
     return VIDEO_MIMES.indexOf(mime) >= 0;
   }
-
-  public static isHEIC(mime: string): boolean {
-    return mime === 'image/heic';
-  }
 }

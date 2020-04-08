@@ -10,9 +10,7 @@ export default class ThumbnailUtil {
     const fileName = path.basename(filePath); // keeping extension on purpose to avoid images with same name but different extensions to share the same thumbnail
     const dstPath = `${dstFolder}/${fileName}.jpg`;
 
-    if (FileUtil.isHEIC(fileMIME)) {
-      return this.generateForHEIC(filePath, dstPath);
-    } else if (FileUtil.isSupportedImageMIME(fileMIME)) {
+    if (FileUtil.isSupportedImageMIME(fileMIME)) {
       return this.generateForImage(filePath, dstPath);
     } else if (FileUtil.isSupportedVideoMIME(fileMIME)) {
       return this.generateForVideo(filePath, dstPath);
@@ -23,21 +21,6 @@ export default class ThumbnailUtil {
 
   private static generateForImage (srcPath: string, dstPath: string): Promise<string> {
     return new Promise((resolve, reject) => {
-      ffmpeg(srcPath)
-        .size('500x?')
-        .output(dstPath)
-        .on('end', function() {
-          resolve(dstPath);
-        })
-        .on('error', function(err) {
-          reject(err.message);
-        })
-        .run()
-    })
-  }
-
-  private static generateForHEIC (srcPath: string, dstPath: string): Promise<string> {
-    return new Promise((resolve, reject) => {
       im.convert([srcPath, '-resize', '500', dstPath],
         function(err){
           if (err) {
@@ -47,7 +30,6 @@ export default class ThumbnailUtil {
         });
     })
   }
-
   private static async generateForVideo(srcPath: string, dstPath: string): Promise<string> {
     return new Promise((resolve, reject) => {
       ffmpeg(srcPath)
